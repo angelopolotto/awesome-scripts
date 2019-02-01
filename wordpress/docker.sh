@@ -11,7 +11,7 @@ read option
 
 if [ $option -eq '1' ]
 then
-    docker-compose -f stack.yml up
+    docker-compose -f stack.yml up -d
 
 elif [ $option -eq '2' ]
 then
@@ -21,7 +21,7 @@ elif [ $option -eq '3' ]
 then
     # my containers are running like this:
     docker run --name $MYSQLCONTAINERNAME -e MYSQL_ROOT_PASSWORD=789789 -d mysql:5.7
-    docker run --name $WPCONTAINERNAME --link $MYSQLCONTAINERNAME:mysql -p 8080:80 -d wordpress
+    docker run --name $WPCONTAINERNAME --link $MYSQLCONTAINERNAME:mysql -p 80:80 -d wordpress
 
 elif [ $option -eq '4' ]
 then
