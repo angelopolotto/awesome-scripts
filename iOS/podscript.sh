@@ -1,13 +1,9 @@
 #!/bin/sh
 
-# Script para pode auxiliar na atualizacao dos pods do projeto para iOS da Caixa
-# Autor: Angelo Polotto
-# Empresa: Tivit
-
 while :
 do
 	clear
-	echo '--------------------- POD CAIXA -----------------------'
+	echo '--------------------- POD iOS -----------------------'
 	echo '--> Lista de repositorios do pod: '
 	pod repo list
 	echo '-------------------------------------------------------'
