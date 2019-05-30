@@ -18,7 +18,7 @@ OLDIFS=$IFS
 IFS=$'\n'
 # filter only the info that is required
 # https://docs.docker.com/engine/reference/commandline/ps/
-for CONTAINER in $(docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}' | tail -n +2)
+for CONTAINER in $(docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}')
 do
         # format the input to get only the wantes fields
         ID=$(echo "$CONTAINER" | tr -s " " | cut -d" " -f1)
