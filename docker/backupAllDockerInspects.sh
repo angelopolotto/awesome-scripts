@@ -18,7 +18,7 @@ OLDIFS=$IFS
 IFS=$'\n'
 # filter only the info that is required
 # https://docs.docker.com/engine/reference/commandline/ps/
-for CONTAINER in $(docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}' | tail -n +2)
+for CONTAINER in $(docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}')
 do
         # format the input to get only the wantes fields
         ID=$(echo "$CONTAINER" | tr -s " " | cut -d" " -f1)
@@ -26,7 +26,7 @@ do
         NAME=$(echo "$CONTAINER" | tr -s " " | cut -d" " -f3)
         
         # save the inspect in a file
-        docker inspect $ID > $DIR/"$ID"_"$IMAGE"_"$NAME".json
+        docker inspect $ID > $DIR/"$ID"_"$NAME".json
         
         # show the status
         echo "$ID       $IMAGE      $NAME       Saved!"
