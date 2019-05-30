@@ -26,7 +26,7 @@ do
         NAME=$(echo "$CONTAINER" | tr -s " " | cut -d" " -f3)
         
         # save the inspect in a file
-        docker inspect $ID > $DIR/"$ID"_"$IMAGE"_"$NAME".json
+        docker inspect $ID > $DIR/"$ID"_"$NAME".json
         
         # show the status
         echo "$ID       $IMAGE      $NAME       Saved!"
