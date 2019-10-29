@@ -5,6 +5,7 @@
 # references:
 # https://unix.stackexchange.com/questions/77277/how-to-append-multiple-lines-to-a-file
 # https://unix.stackexchange.com/questions/28791/prompt-for-sudo-password-and-programmatically-elevate-privilege-in-bash-script
+# https://www.cyberciti.biz/faq/unix-linux-export-variable-http_proxy-with-special-characters/
 # snap
 # https://stackoverflow.com/questions/50584084/snap-proxy-doesn%C2%B4t-work
 # apt
@@ -14,8 +15,6 @@
 # permissão para sudo
 [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
 
-# https://www.cyberciti.biz/faq/unix-linux-export-variable-http_proxy-with-special-characters/
-# Ajuda para senha com caracteres especiais
 # unum '@:!#$'
 # replace 0x for %
 # Octal  Decimal      Hex        HTML    Character   Unicode
@@ -24,12 +23,16 @@
 # 041       33     0x21       !    "!"         EXCLAMATION MARK
 # 043       35     0x23       #    "#"         NUMBER SIGN
 # 044       36     0x24       $    "$"         DOLLAR SIGN
-PROXY_URL='some.url:3128'
-PROXY_USER_PASS='user:password'
+PROXY_URL_ONLY='someurl.corp'
+PROXY_PORT='3128'
+PROXY_USER='some.user'
+PROXY_PASS='some.password'
 
+PROXY_URL="$PROXY_URL_ONLY:$PROXY_PORT"
+PROXY_USER_PASS="$PROXY_USER:$PROXY_PASS"
 PROXY_CONFIG="http://$PROXY_USER_PASS@$PROXY_URL/"
 
-echo "Configure proxies (snap/apt/git)?"
+echo "Configure proxies (apt/snap/git)?"
 read -p "option [c(configure)/r(remove)]: " OPT
 
 case $OPT in
@@ -49,6 +52,36 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
 		# git
 		git config --global http.proxy $PROXY_CONFIG
 		git config --global https.proxy $PROXY_CONFIG
+
+		# maven
+		mkdir -p ~/.m2/
+		echo "
+<settings>
+<proxies>
+ <!-- Proxy for HTTP -->
+ <proxy>
+  <id>optional</id>
+  <active>true</active>
+  <protocol>http</protocol>
+  <username>$PROXY_USER</username>
+  <password>$PROXY_PASS</password>
+  <host>$PROXY_URL_ONLY</host>
+  <port>$PROXY_PORT</port>
+  <nonProxyHosts>local.net</nonProxyHosts>
+ </proxy>
+ <!-- Proxy for HTTPS -->
+ <proxy>
+  <id>optional</id>
+  <active>true</active>
+  <protocol>https</protocol>
+  <username>$PROXY_USER</username>
+  <password>$PROXY_PASS</password>
+  <host>$PROXY_URL_ONLY</host>
+  <port>$PROXY_PORT</port>
+  <nonProxyHosts>local.net</nonProxyHosts>
+ </proxy>
+</proxies>
+</settings>" >> ~/.m2/settings.xml
 		####################################################
 	;;
 
@@ -65,6 +98,9 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
 		# git
 		git config --global http.proxy ""
 		git config --global https.proxy ""
+		
+		# maven
+		rm -r ~/.m2/settings.xml
 		####################################################
 	;;
 	*)
@@ -90,4 +126,9 @@ echo "####################################################"
 echo "checking git proxy config:"
 git config --global http.proxy
 git config --global https.proxy
+echo "####################################################"
+
+echo "####################################################"
+echo "checking maven config file (~/.m2/settings.xml):"
+cat ~/.m2/settings.xml
 echo "####################################################"

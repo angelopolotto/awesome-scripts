@@ -18,6 +18,9 @@ apt -y update
 # upgrade apt
 apt -y upgrade
 
+# gparted
+apt -y install gparted
+
 # git
 apt -y install git
 
