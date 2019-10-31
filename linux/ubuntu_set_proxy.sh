@@ -23,16 +23,16 @@
 # 041       33     0x21       !    "!"         EXCLAMATION MARK
 # 043       35     0x23       #    "#"         NUMBER SIGN
 # 044       36     0x24       $    "$"         DOLLAR SIGN
-PROXY_URL_ONLY='someurl.corp'
-PROXY_PORT='3128'
-PROXY_USER='some.user'
-PROXY_PASS='some.password'
+PROXY_URL_ONLY=''
+PROXY_PORT=''
+PROXY_USER=''
+PROXY_PASS=''
 
 PROXY_URL="$PROXY_URL_ONLY:$PROXY_PORT"
 PROXY_USER_PASS="$PROXY_USER:$PROXY_PASS"
 PROXY_CONFIG="http://$PROXY_USER_PASS@$PROXY_URL/"
 
-echo "Configure proxies (apt/snap/git)?"
+echo "Configure proxies (snap/apt/git/maven/pip)?"
 read -p "option [c(configure)/r(remove)]: " OPT
 
 case $OPT in
@@ -82,6 +82,12 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
  </proxy>
 </proxies>
 </settings>" >> ~/.m2/settings.xml
+		
+		# pip3
+		mkdir -p ~/pip/
+		echo "
+proxy = [$PROXY_USER:$PROXY_PASS]$PROXY_URL_ONLY:$PROXY_PORT
+" >> ~/pip/pip.conf
 		####################################################
 	;;
 
@@ -101,6 +107,9 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
 		
 		# maven
 		rm -r ~/.m2/settings.xml
+		
+		# pip3
+		rm -r ~/pip/pip.conf
 		####################################################
 	;;
 	*)
@@ -131,4 +140,9 @@ echo "####################################################"
 echo "####################################################"
 echo "checking maven config file (~/.m2/settings.xml):"
 cat ~/.m2/settings.xml
+echo "####################################################"
+
+echo "####################################################"
+echo "checking pip config file (~/pip/pip.conf):"
+cat ~/pip/pip.conf
 echo "####################################################"
