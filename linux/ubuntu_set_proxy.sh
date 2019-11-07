@@ -88,6 +88,19 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
 		echo "
 proxy = [$PROXY_USER:$PROXY_PASS]$PROXY_URL_ONLY:$PROXY_PORT
 " >> ~/pip/pip.conf
+
+		# docker
+		echo "
+http_proxy=\"$PROXY_CONFIG\"
+https_proxy=\"$PROXY_CONFIG\"
+" >> /etc/default/docker
+
+		mkdir -p /lib/systemd/system/
+		echo "
+EnvironmentFile=/etc/default/docker
+" >> /lib/systemd/system/docker.service
+		systemctl daemon-reload
+		systemctl restart docker
 		####################################################
 	;;
 
@@ -110,6 +123,12 @@ proxy = [$PROXY_USER:$PROXY_PASS]$PROXY_URL_ONLY:$PROXY_PORT
 		
 		# pip3
 		rm -r ~/pip/pip.conf
+
+		# docker
+		rm -r /etc/default/docker
+		rm -r /lib/systemd/system/docker.service
+		systemctl daemon-reload
+		systemctl restart docker
 		####################################################
 	;;
 	*)
@@ -145,4 +164,10 @@ echo "####################################################"
 echo "####################################################"
 echo "checking pip config file (~/pip/pip.conf):"
 cat ~/pip/pip.conf
+echo "####################################################"
+
+echo "####################################################"
+echo "checking docker config file (/etc/default/docker and /lib/systemd/system/docker.service):"
+cat /etc/default/docker
+cat /lib/systemd/system/docker.service
 echo "####################################################"

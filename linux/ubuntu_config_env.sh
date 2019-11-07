@@ -42,6 +42,13 @@ alias python=python3
 alias pip=pip3
 " >> ~/.bash_aliases
 
+# java
+# https://www.digitalocean.com/community/tutorials/como-instalar-o-java-com-apt-no-ubuntu-18-04-pt
+apt -y install default-jre
+
+# maven
+apt -y install maven
+
 # postman
 snap install postman
 
