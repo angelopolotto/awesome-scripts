@@ -1,0 +1,21 @@
+{
+	"schemaVersion" : 2,
+	"dockerfileLines" : [
+		"FROM alpine:edge",
+		"ADD ./ /scripts",
+        "WORKDIR /scripts",
+        "EXPOSE 5432",
+        "RUN apk update",
+        "RUN apk upgrade",
+        "RUN apk add -U tzdata",
+        "RUN apk add --no-cache curl",
+        "RUN apk add postgresql-client",
+        "RUN apk info -a postgresql-client",
+        "RUN apk add --no-cache python3",
+
+        "RUN chmod 777 postgres_backup.sh entry.sh tasks.py requirements.txt",
+        "RUN pip3 install -r requirements.txt",
+
+        "CMD [\"/scripts/entry.sh\"]"
+	]
+}

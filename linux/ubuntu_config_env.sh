@@ -21,14 +21,33 @@ apt -y upgrade
 # gparted
 apt -y install gparted
 
+# gnome tweaks
+apt -y install gnome-tweaks
+
 # git
 apt -y install git
 
 # docker
 apt -y install docker.io
 
+# python 3
+apt -y install python3
+
 # python pip3
 apt -y install python3-pip
+
+# configure python3 as default
+echo "
+alias python=python3
+alias pip=pip3
+" >> ~/.bash_aliases
+
+# java
+# https://www.digitalocean.com/community/tutorials/como-instalar-o-java-com-apt-no-ubuntu-18-04-pt
+apt -y install default-jre
+
+# maven
+apt -y install maven
 
 # postman
 snap install postman
