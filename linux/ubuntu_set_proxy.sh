@@ -15,24 +15,22 @@
 # permissão para sudo
 [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
 
-# unum '@:!#$'
-# replace 0x for %
-# Octal  Decimal      Hex        HTML    Character   Unicode
-# 0100       64     0x40       @    "@"         COMMERCIAL AT
-# 072       58     0x3A       :    ":"         COLON
-# 041       33     0x21       !    "!"         EXCLAMATION MARK
-# 043       35     0x23       #    "#"         NUMBER SIGN
-# 044       36     0x24       $    "$"         DOLLAR SIGN
-PROXY_URL_ONLY=''
-PROXY_PORT=''
-PROXY_USER=''
-PROXY_PASS=''
+# decide se usa arquivo local ou não através de argumentos
+# ex: ./ubuntu_set_proxy.sh env-dev.env
+if [ ! -z "$1" ]; then
+  echo "-> Usando arquivo ENV $1"
+  # configura as variáveis de ambiente no modo debug
+  export $(grep -v '^#' $1 | xargs -d '\n')
+else
+  echo "-> informe o arquivo contendo as informações do proxy ex: ./ubuntu_set_proxy.sh env-dev.env"
+  exit 1
+fi
 
-PROXY_URL="$PROXY_URL_ONLY:$PROXY_PORT"
+PROXY_URL_FORMATED="$PROXY_URL:$PROXY_PORT"
 PROXY_USER_PASS="$PROXY_USER:$PROXY_PASS"
-PROXY_CONFIG="http://$PROXY_USER_PASS@$PROXY_URL/"
+PROXY_CONFIG="http://$PROXY_USER_PASS@$PROXY_URL_FORMATED/"
 
-echo "Configure proxies (snap/apt/git/maven/pip)?"
+echo "Configure proxies (snap/apt/git/maven/pip/docker)?"
 read -p "option [c(configure)/r(remove)]: " OPT
 
 case $OPT in
@@ -65,7 +63,7 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
   <protocol>http</protocol>
   <username>$PROXY_USER</username>
   <password>$PROXY_PASS</password>
-  <host>$PROXY_URL_ONLY</host>
+  <host>$PROXY_URL</host>
   <port>$PROXY_PORT</port>
   <nonProxyHosts>local.net</nonProxyHosts>
  </proxy>
@@ -76,7 +74,7 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
   <protocol>https</protocol>
   <username>$PROXY_USER</username>
   <password>$PROXY_PASS</password>
-  <host>$PROXY_URL_ONLY</host>
+  <host>$PROXY_URL</host>
   <port>$PROXY_PORT</port>
   <nonProxyHosts>local.net</nonProxyHosts>
  </proxy>
@@ -86,7 +84,7 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
 		# pip3
 		mkdir -p ~/pip/
 		echo "
-proxy = [$PROXY_USER:$PROXY_PASS]$PROXY_URL_ONLY:$PROXY_PORT
+proxy = [$PROXY_USER:$PROXY_PASS]$PROXY_URL:$PROXY_PORT
 " >> ~/pip/pip.conf
 
 		# docker
@@ -171,3 +169,8 @@ echo "checking docker config file (/etc/default/docker and /lib/systemd/system/d
 cat /etc/default/docker
 cat /lib/systemd/system/docker.service
 echo "####################################################"
+
+if [ ! -z "$1" ]; then
+  # remove as variáveis de ambiente no modo debug
+  unset $(grep -v '^#' $1 | sed -E 's/(.*)=.*/\1/' | xargs)
+fi
