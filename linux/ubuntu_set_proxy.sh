@@ -15,7 +15,8 @@
 # maven
 # https://www.javahelps.com/2015/08/set-proxy-for-maven-in-eclipse.html
 # pip
-# 
+# https://stackoverflow.com/questions/43473041/how-to-configure-pip-per-config-file-to-use-a-proxy-with-authentification
+# https://pip.pypa.io/en/stable/user_guide/#using-a-proxy-server
 ########################
 
 # permissão para sudo
