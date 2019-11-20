@@ -10,6 +10,13 @@
 # https://stackoverflow.com/questions/50584084/snap-proxy-doesn%C2%B4t-work
 # apt
 # https://www.serverlab.ca/tutorials/linux/administration-linux/how-to-set-the-proxy-for-apt-for-ubuntu-18-04/
+# docker
+# https://stackoverflow.com/questions/23111631/cannot-download-docker-images-behind-a-proxy
+# maven
+# https://www.javahelps.com/2015/08/set-proxy-for-maven-in-eclipse.html
+# pip
+# https://stackoverflow.com/questions/43473041/how-to-configure-pip-per-config-file-to-use-a-proxy-with-authentification
+# https://pip.pypa.io/en/stable/user_guide/#using-a-proxy-server
 ########################
 
 # permissão para sudo
@@ -82,21 +89,18 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
 </settings>" >> ~/.m2/settings.xml
 		
 		# pip3
-		mkdir -p ~/pip/
+		mkdir -p ~/.config/pip/
 		echo "
-proxy = [$PROXY_USER:$PROXY_PASS]$PROXY_URL:$PROXY_PORT
-" >> ~/pip/pip.conf
+[global]
+proxy = $PROXY_USER:$PROXY_PASS@$PROXY_URL:$PROXY_PORT
+" >> ~/.config/pip/pip.conf
 
 		# docker
+		mkdir -p /etc/systemd/system/docker.service.d
 		echo "
-http_proxy=\"$PROXY_CONFIG\"
-https_proxy=\"$PROXY_CONFIG\"
-" >> /etc/default/docker
-
-		mkdir -p /lib/systemd/system/
-		echo "
-EnvironmentFile=/etc/default/docker
-" >> /lib/systemd/system/docker.service
+[Service]
+Environment="HTTP_PROXY=http://$PROXY_URL_FORMATED"
+" >> /etc/systemd/system/docker.service.d/http-proxy.conf
 		systemctl daemon-reload
 		systemctl restart docker
 		####################################################
@@ -120,11 +124,10 @@ EnvironmentFile=/etc/default/docker
 		rm -r ~/.m2/settings.xml
 		
 		# pip3
-		rm -r ~/pip/pip.conf
+		rm -r ~/.config/pip/
 
 		# docker
-		rm -r /etc/default/docker
-		rm -r /lib/systemd/system/docker.service
+		rm -r /etc/systemd/system/docker.service.d
 		systemctl daemon-reload
 		systemctl restart docker
 		####################################################
@@ -160,14 +163,14 @@ cat ~/.m2/settings.xml
 echo "####################################################"
 
 echo "####################################################"
-echo "checking pip config file (~/pip/pip.conf):"
-cat ~/pip/pip.conf
+echo "checking pip config file (~/.config/pip/pip.conf):"
+cat ~/.config/pip/pip.conf
 echo "####################################################"
 
 echo "####################################################"
-echo "checking docker config file (/etc/default/docker and /lib/systemd/system/docker.service):"
-cat /etc/default/docker
-cat /lib/systemd/system/docker.service
+echo "checking docker config file (/etc/systemd/system/docker.service.d/http-proxy.conf):"
+systemctl show --property Environment docker
+cat /etc/systemd/system/docker.service.d/http-proxy.conf
 echo "####################################################"
 
 if [ ! -z "$1" ]; then
