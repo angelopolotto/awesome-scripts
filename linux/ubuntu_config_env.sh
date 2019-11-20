@@ -62,7 +62,13 @@ snap install --classic code
 snap install --classic android-studio
 
 # github desktop
-snap install --beta --classic github-desktop
+# snap install --beta --classic github-desktop
+
+# dbeaver
+# https://sempreupdate.com.br/como-instalar-o-dbeaver-no-ubuntu/
+wget -c https://dbeaver.io/files/6.0.0/dbeaver-ce_6.0.0_amd64.deb
+dpkg -i dbeaver-ce_6.0.0_amd64.deb
+apt-get install -f
 
 # install codecs
 # https://websiteforstudents.com/how-to-install-video-audio-codecs-on-ubuntu-18-10-18-04-16-04-lts/
