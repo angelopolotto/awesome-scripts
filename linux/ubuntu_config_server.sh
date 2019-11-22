@@ -13,6 +13,7 @@
 # https://superuser.com/questions/791218/can-i-use-another-port-other-than-443-for-ssl-communication
 # code server
 # https://github.com/cdr/code-server
+# https://github.com/cdr/code-server/issues/237
 # terminal web
 # https://www.tecmint.com/gotty-share-linux-terminal-in-web-browser/
 # https://www.tecmint.com/access-linux-server-terminal-in-web-browser-using-wetty/
