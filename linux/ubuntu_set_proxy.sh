@@ -92,7 +92,7 @@ Acquire::https::Proxy \"$PROXY_CONFIG\";
 		mkdir -p ~/.config/pip/
 		echo "
 [global]
-proxy = $PROXY_USER:$PROXY_PASS@$PROXY_URL:$PROXY_PORT
+proxy = $PROXY_URL:$PROXY_PORT
 " >> ~/.config/pip/pip.conf
 
 		# docker
