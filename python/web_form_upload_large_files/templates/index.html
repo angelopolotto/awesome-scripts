@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
 
     <link rel="stylesheet" 
-     href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css"/>
+     href="./assets/dropzone.min.css"/>
 
     <link rel="stylesheet" 
-     href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/basic.min.css"/>
+     href="./assets/basic.min.css"/>
 
     <script type="application/javascript" 
-     src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.js">
+     src="./assets/dropzone.min.js">
     </script>
 
     <title>File Dropper</title>
@@ -28,7 +28,7 @@
         chunking: true,
         forceChunking: true,
         url: '/upload',
-        maxFilesize: 1025, // megabytes
+        maxFilesize: 5120, // megabytes
         chunkSize: 1000000 // bytes
     }
 </script>
