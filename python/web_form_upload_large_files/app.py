@@ -43,6 +43,11 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    # Route to deal with the uploaded chunks
+    # debug only
+    # logger.info(request.form)
+    # logger.info(request.files)
+
     file = request.files['file']
 
     save_path = os.path.join(data_dir, secure_filename(file.filename))
