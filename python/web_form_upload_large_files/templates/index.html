@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" 
+     href="./assets/dropzone.min.css"/>
+
+    <link rel="stylesheet" 
+     href="./assets/basic.min.css"/>
+
+    <script type="application/javascript" 
+     src="./assets/dropzone.min.js">
+    </script>
+
+    <title>File Dropper</title>
+</head>
+<body>
+
+<form method="POST" action='/upload' class="dropzone dz-clickable" 
+      id="dropper" enctype="multipart/form-data">
+</form>
+
+<script type="application/javascript">
+    Dropzone.options.dropper = {
+        paramName: 'file',
+        chunking: true,
+        forceChunking: true,
+        url: '/upload',
+        maxFilesize: 5120, // megabytes
+        chunkSize: 1000000 // bytes
+    }
+</script>
+
+</body>
+</html>
